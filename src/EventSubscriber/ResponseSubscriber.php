@@ -3,12 +3,12 @@
 namespace App\EventSubscriber;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpKernel\Event\RequestEvent;
+use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
-class RequestSubscriber implements EventSubscriberInterface
+class ResponseSubscriber implements EventSubscriberInterface
 {
-    public function onKernelRequest(RequestEvent $event)
+    public function onKernelResponse(ResponseEvent $event)
     {
         \Prometheus\Storage\Redis::setDefaultOptions(
             [
@@ -24,21 +24,22 @@ class RequestSubscriber implements EventSubscriberInterface
         $registry = \Prometheus\CollectorRegistry::getDefault();
 
         $uri = $event->getRequest()->getRequestUri();
+        $statusCode = $event->getResponse()->getStatusCode();
 
         if (str_contains($uri, '/_wdt/')) {
             return;
         }
 
         if  ($event->getRequestType() === HttpKernelInterface::MAIN_REQUEST) {
-            $counter = $registry->registerCounter('blog', 'http_requests_total', 'Http Requests', ['path']);
-            $counter->incBy(1, [$uri]);
+            $counter = $registry->registerCounter('blog', 'http_requests_total', 'Http Requests', ['path', 'statusCode']);
+            $counter->incBy(1, [$uri, $statusCode]);
         }
     }
 
     public static function getSubscribedEvents()
     {
         return [
-            'kernel.request' => 'onKernelRequest',
+            'kernel.response' => 'onKernelResponse',
         ];
     }
 }
