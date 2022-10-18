@@ -89,6 +89,12 @@ services:
       - grafana-lib:/var/lib/grafana
       - grafana-logs:/var/log/grafana
 
+  mailcatcher:
+    image: schickling/mailcatcher
+    ports:
+      - '1080:1080'
+      - '1025:1025'
+
 volumes:
   prometheus-data:
   db-data:
