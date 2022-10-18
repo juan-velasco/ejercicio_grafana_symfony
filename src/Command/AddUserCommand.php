@@ -12,9 +12,11 @@
 namespace App\Command;
 
 use App\Entity\User;
+use App\Event\UserCreatedEvent;
 use App\Repository\UserRepository;
 use App\Utils\Validator;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Exception\RuntimeException;
 use Symfony\Component\Console\Input\InputArgument;
@@ -61,8 +63,9 @@ class AddUserCommand extends Command
     private $passwordHasher;
     private $validator;
     private $users;
+    private $eventDispatcher;
 
-    public function __construct(EntityManagerInterface $em, UserPasswordHasherInterface $passwordHasher, Validator $validator, UserRepository $users)
+    public function __construct(EntityManagerInterface $em, UserPasswordHasherInterface $passwordHasher, Validator $validator, UserRepository $users, EventDispatcherInterface $eventDispatcher)
     {
         parent::__construct();
 
@@ -70,6 +73,7 @@ class AddUserCommand extends Command
         $this->passwordHasher = $passwordHasher;
         $this->validator = $validator;
         $this->users = $users;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -203,6 +207,8 @@ class AddUserCommand extends Command
         if ($output->isVerbose()) {
             $this->io->comment(sprintf('New user database id: %d / Elapsed time: %.2f ms / Consumed memory: %.2f MB', $user->getId(), $event->getDuration(), $event->getMemory() / (1024 ** 2)));
         }
+
+        $this->eventDispatcher->dispatch(new UserCreatedEvent($user));
 
         return Command::SUCCESS;
     }

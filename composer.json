@@ -16,6 +16,8 @@
         "doctrine/doctrine-migrations-bundle": "^3.0",
         "doctrine/orm": "^2.10",
         "erusev/parsedown": "^1.6",
+        "promphp/prometheus_client_php": "^2.6",
+        "promphp/prometheus_push_gateway_php": "^1.1",
         "sensio/framework-extra-bundle": "^6.1",
         "symfony/apache-pack": "^1.0",
         "symfony/asset": "^5.4",
@@ -60,7 +62,11 @@
         "preferred-install": {
             "*": "dist"
         },
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "symfony/flex": true,
+            "symfony/runtime": true
+        }
     },
     "autoload": {
         "psr-4": {
