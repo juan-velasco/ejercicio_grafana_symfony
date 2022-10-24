@@ -1,0 +1,14 @@
+global:
+  smtp_smarthost: 'mailcatcher:1025'
+  smtp_from: 'curso@loki.es'
+  smtp_auth_username: ''
+  smtp_auth_password: ''
+  smtp_require_tls: false
+
+route:
+  receiver: 'blog'
+
+receivers:
+  - name: 'blog'
+    email_configs:
+    - to: 'receptor@loki.es'

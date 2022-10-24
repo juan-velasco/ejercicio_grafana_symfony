@@ -1,0 +1,11 @@
+groups:
+- name: blog
+  rules:
+  - alert: user_created
+    expr: sum(rate(blog_users_created_total{job="blog"}[1m])) > 0
+    for: 1m
+    labels:
+      severity: critical
+    annotations:
+      summary: "User created"
+      description: "User created"

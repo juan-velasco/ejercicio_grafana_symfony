@@ -95,6 +95,16 @@ services:
       - '1080:1080'
       - '1025:1025'
 
+  alertmanager:
+    image: prom/alertmanager
+    ports:
+      - 9093:9093
+    volumes:
+      - "./etc/prometheus/alertmanager/:/etc/alertmanager/"
+    command:
+      - '--config.file=/etc/alertmanager/config.yml'
+      - '--storage.path=/alertmanager'
+
 volumes:
   prometheus-data:
   db-data:

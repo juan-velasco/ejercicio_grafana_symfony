@@ -25,3 +25,15 @@ scrape_configs:
     scrape_interval: 5s
     static_configs:
       - targets: ['cadvisor:8080']
+
+# Configuración de las reglas de alertmanager
+rule_files:
+  - "/etc/prometheus/alertmanager/rules.yml"
+
+# Damos de alta el alertmanager en prometheus
+alerting:
+  alertmanagers:
+    - scheme: http
+      static_configs:
+        - targets:
+            - "alertmanager:9093"
