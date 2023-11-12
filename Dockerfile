@@ -18,10 +18,9 @@ RUN echo "listen = 9000" >> /etc/php/8.1/fpm/pool.d/www.conf
 COPY --from=composer:2.2.7 /usr/bin/composer /usr/bin/composer
 
 # Instalar Nodejs y Yarn
-RUN curl -sL https://deb.nodesource.com/setup_14.x -o nodesource_setup.sh \
-    && bash nodesource_setup.sh \
-    && apt install -y nodejs \
-    && npm install --global yarn
+RUN apt-get install -y nodejs && \
+    apt-get install -y npm && npm install -g n
+RUN n v18 && npm install -g yarn
 
 WORKDIR /app
 
