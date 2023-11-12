@@ -43,7 +43,7 @@ services:
       - 9090:9090
 
   mysqld_exporter:
-    image: prom/mysqld-exporter
+    image: prom/mysqld-exporter:v0.14.0
     user: root
     ports:
       - 9104:9104
