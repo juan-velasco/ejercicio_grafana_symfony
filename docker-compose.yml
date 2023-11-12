@@ -1,23 +1,14 @@
 version: '3.7'
 
 services:
-  nginx:
-    image: nginx:1.21
-    restart: "no"
+  backend:
+    platform: linux/amd64
+    build:
+      context: ./
+      dockerfile: ./Dockerfile.production
+    restart: unless-stopped
     ports:
       - "8041:80"
-    volumes:
-      - .:/app:delegated # the container’s view is authoritative (permit delays before updates on the container appear in the host)
-      - ./etc/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
-    depends_on:
-      - php
-
-  php:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    volumes:
-      - .:/app:delegated
 
   database:
     image: mysql:5.7
