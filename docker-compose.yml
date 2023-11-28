@@ -3,9 +3,10 @@ version: '3.7'
 services:
   backend:
     platform: linux/amd64
-    build:
-      context: ./
-      dockerfile: ./Dockerfile.production
+    image: jvelascoiti/ejercicio_grafana_symfony-backend:latest
+#    build:
+#      context: ./
+#      dockerfile: ./Dockerfile.production
     restart: unless-stopped
     ports:
       - "8041:80"
